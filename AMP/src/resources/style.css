@@ -1,0 +1,61 @@
+.menu:hover{
+    -fx-background-color: #dddcda;
+    -fx-background-insets: 3.5;
+}
+
+.menu-item:focused{
+    -fx-background-color: #dddcda;
+    -fx-background-insets: 1;
+}
+
+.menu:showing{
+	-fx-background-color: #dddcda;
+    -fx-background-insets: 3.5;
+}
+
+
+.menu-item:focused .label{
+	-fx-text-fill: black;
+}
+
+.menu-bar > .container > .menu> .label {
+    -fx-text-fill: black;
+}
+
+.button {
+  -fx-background-color: transparent;
+  -fx-text-fill: black;
+}
+
+.button:hover {
+  -fx-background-color: #dddcda;
+  -fx-background-radius: 0;
+  -fx-background-insets: 3.5;
+}
+
+.slider .track{
+	-fx-background-color: white;
+	-fx-border-color: #7f7e76;
+	-fx-border-width: 2;
+	-fx-background-radius: 0;
+}
+
+.slider .thumb{
+	-fx-background-radius: 0;
+	-fx-border-color: #7f7e76;
+}
+
+.slider:focused .thumb{
+	-fx-focus-color: transparent;
+    -fx-background-insets: -1.4, 0, 1, 2;
+}
+
+.table-view:focused {
+	-fx-focus-color: black;
+	-fx-background-insets: -0.2, 0, 0.2;
+}
+
+.table-view{
+	-fx-border-width: 0;
+	-fx-border-color: transparent;
+}
