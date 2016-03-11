@@ -43,15 +43,16 @@ public class MainPane extends Application {
 			private CheckMenuItem disableAnimLogo;
 			private MenuItem displayAbout;
 
-	private HBox audioControl; //HBox and all buttons associated with.
-	private HBox sliderControl; //Slider HBox
+	private HBox audioControl; //HBox for button and slider HBox
+		private HBox buttonControl;
+		private HBox sliderControl; //Slider HBox
 
 		private Button btPlay; private Button btStop; private Button btPause;
-		private Button btPrev; private Button btNext; private Button btRandNext;
+		private Button btPrev; private Button btNext;
 		private Button btShuffle; private Button btRepeat;
 
 		private ImageView btPlayImg; private ImageView btStopImg; private ImageView btPauseImg;
-		private ImageView btPrevImg; private ImageView btNextImg; private ImageView btRandNextImg;
+		private ImageView btPrevImg; private ImageView btNextImg;
 		private ImageView btShuffleImg; private ImageView btRepeatImg;
 
 		private Slider sdVolume; private Slider sdSeek; //Volume and seek sliders
@@ -78,6 +79,7 @@ public class MainPane extends Application {
 				spectrumAnim = new Pane(); //Top spectrum animation pane.
 
 			//Top menu (File, View, About)
+
 			topMenu = new MenuBar();
 				menuFile = new Menu("File");
 					addFile = new MenuItem("Add File"); addFolder = new MenuItem("Add Folder"); loadPlaylist = new MenuItem("Load Playlist");
@@ -96,7 +98,10 @@ public class MainPane extends Application {
 
 			topMenu.getMenus().addAll(menuFile, menuView, menuAbout); //Add the menus to the MenuBar
 
-			audioControl = new HBox(0); //Placeholder button texts until graphics.
+
+			audioControl = new HBox(); //Button HBox and Slider HBox
+
+			buttonControl = new HBox();
 			sliderControl = new HBox();
 
 			//Buttons and Tooltips
@@ -118,20 +123,15 @@ public class MainPane extends Application {
 				btPrev = new Button(); btPrev.setTooltip(new Tooltip("Previous"));
 					btPrevImg = new ImageView("resources/buttons/previous.png");
 						btPrevImg.setFitHeight(23); btPrevImg.setFitWidth(23);
-						btPrev.setGraphic(btStopImg);
+						btPrev.setGraphic(btPrevImg);
 
 				btNext = new Button();  btNext.setTooltip(new Tooltip("Next"));
 					btNextImg = new ImageView("resources/buttons/next.png");
 						btNextImg.setFitHeight(23); btNextImg.setFitWidth(23);
 						btNext.setGraphic(btNextImg);
 
-				btRandNext = new Button(); btRandNext.setTooltip(new Tooltip("Random Next"));
-					btRandNextImg = new ImageView("resources/buttons/nextrandom.png");
-						btRandNextImg.setFitHeight(23); btRandNextImg.setFitWidth(23);
-						btRandNext.setGraphic(btRandNextImg);
-
 				btShuffle = new Button(); btShuffle.setTooltip(new Tooltip("Shuffle"));
-					btShuffleImg = new ImageView("resources/buttons/playrandom.png");
+					btShuffleImg = new ImageView("resources/buttons/play.png");
 						btShuffleImg.setFitHeight(23); btShuffleImg.setFitWidth(23);
 						btShuffle.setGraphic(btShuffleImg);
 
@@ -151,15 +151,17 @@ public class MainPane extends Application {
 			sliderControl.getChildren().addAll(sdVolume, sdSeek);
 			sliderControl.setAlignment(Pos.CENTER);
 
-			sliderControl.setPadding(new Insets(0,0,2,72));
 
 			//Add elements to the HBox.
-			audioControl.getChildren().addAll(btStop, btPause, btPlay, btPrev, btNext, btRandNext, btShuffle, btRepeat,
-					sliderControl);
-			audioControl.setLayoutX(210);
+			buttonControl.getChildren().addAll(btStop, btPause, btPlay, btPrev, btNext, btShuffle, btRepeat);
+			buttonControl.setPadding(new Insets(0,0,0,75));
 
-			audioControl.layoutXProperty().bind(primaryStage.widthProperty().divide(4.5));
 
+			audioControl.getChildren().addAll(buttonControl, sliderControl);
+			audioControl.setPadding(new Insets(0,175,0,0));
+
+			audioControl.setAlignment(Pos.TOP_RIGHT);
+			audioControl.setLayoutX(150);
 
 			//Bind the top bar to the stage.
 			audioControl.prefWidthProperty().bind(primaryStage.widthProperty());
@@ -172,6 +174,9 @@ public class MainPane extends Application {
 
 			//Add MenuBar and HBox to the pane.
 			topPane.getChildren().addAll(topMenu, audioControl);
+
+
+
 			spectrumAnim.getChildren().add(placeholder);
 
 			topBox.getChildren().addAll(topPane, spectrumAnim);
@@ -183,9 +188,6 @@ public class MainPane extends Application {
 			libraryView.setEditable(false);
 
 			//Max width
-		//	libraryView.setPrefWidth(600);
-			//libraryView.setMaxWidth(600);
-
 
 				//Create columns
 				playingColumn = new TableColumn("Playing");
@@ -228,8 +230,13 @@ public class MainPane extends Application {
 			primaryStage.setTitle("AMP");
 			primaryStage.setScene(scene);
 
+			primaryStage.widthProperty().addListener(e->{
+				sliderControl.setPadding(new Insets(0,0,2,primaryStage.getWidth()/6));
+			});
+
+
 				primaryStage.setMinWidth(1050);
-				primaryStage.setMaxHeight(848);
+				primaryStage.setMaxHeight(848); primaryStage.setMinHeight(750);
 
 			primaryStage.show();
 
