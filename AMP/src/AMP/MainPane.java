@@ -107,37 +107,37 @@ public class MainPane extends Application {
 			//Buttons and Tooltips
 				btPlay = new Button(); btPlay.setTooltip(new Tooltip("Play"));
 					btPlayImg = new ImageView("resources/buttons/play.png");
-						btPlayImg.setFitHeight(23); btPlayImg.setFitWidth(23);
+						btPlayImg.setFitHeight(27); btPlayImg.setFitWidth(27);
 						btPlay.setGraphic(btPlayImg);
 
 				btStop = new Button(); btStop.setTooltip(new Tooltip("Stop"));
 					btStopImg = new ImageView("resources/buttons/stop.png");
-						btStopImg.setFitHeight(23); btStopImg.setFitWidth(23);
+						btStopImg.setFitHeight(27); btStopImg.setFitWidth(27);
 						btStop.setGraphic(btStopImg);
 
 				btPause = new Button();  btPause.setTooltip(new Tooltip("Pause"));
 					btPauseImg = new ImageView("resources/buttons/pause.png");
-						btPauseImg.setFitHeight(23); btPauseImg.setFitWidth(23);
+						btPauseImg.setFitHeight(27); btPauseImg.setFitWidth(27);
 						btPause.setGraphic(btPauseImg);
 
 				btPrev = new Button(); btPrev.setTooltip(new Tooltip("Previous"));
 					btPrevImg = new ImageView("resources/buttons/previous.png");
-						btPrevImg.setFitHeight(23); btPrevImg.setFitWidth(23);
+						btPrevImg.setFitHeight(27); btPrevImg.setFitWidth(27);
 						btPrev.setGraphic(btPrevImg);
 
 				btNext = new Button();  btNext.setTooltip(new Tooltip("Next"));
 					btNextImg = new ImageView("resources/buttons/next.png");
-						btNextImg.setFitHeight(23); btNextImg.setFitWidth(23);
+						btNextImg.setFitHeight(27); btNextImg.setFitWidth(27);
 						btNext.setGraphic(btNextImg);
 
 				btShuffle = new Button(); btShuffle.setTooltip(new Tooltip("Shuffle"));
-					btShuffleImg = new ImageView("resources/buttons/play.png");
-						btShuffleImg.setFitHeight(23); btShuffleImg.setFitWidth(23);
+					btShuffleImg = new ImageView("resources/buttons/shuffle.png");
+						btShuffleImg.setFitHeight(27); btShuffleImg.setFitWidth(27);
 						btShuffle.setGraphic(btShuffleImg);
 
 				btRepeat = new Button(); btRepeat.setTooltip(new Tooltip("Repeat"));
 					btRepeatImg = new ImageView("resources/buttons/repeat.png");
-						btRepeatImg.setFitHeight(23); btRepeatImg.setFitWidth(23);
+						btRepeatImg.setFitHeight(27); btRepeatImg.setFitWidth(27);
 						btRepeat.setGraphic(btRepeatImg);
 
 
