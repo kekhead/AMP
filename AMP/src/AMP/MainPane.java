@@ -1,8 +1,11 @@
 package AMP;
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,6 +32,8 @@ import javafx.scene.text.Text;
 
 
 public class MainPane extends Application {
+	protected static Stage stage;
+
 	private BorderPane mnPane;
 
 	private VBox topBox;
@@ -39,6 +44,7 @@ public class MainPane extends Application {
 	private MenuBar topMenu; //MenuBar and menus.
 		private Menu menuFile, menuView, menuAbout;
 			private MenuItem addFile, addFolder, loadPlaylist;
+
 			private MenuItem loadPreset, viewSpectrum, viewOsci;
 			private CheckMenuItem disableAnimLogo;
 			private MenuItem displayAbout;
@@ -72,6 +78,8 @@ public class MainPane extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+			stage = primaryStage;
+
 			mnPane = new BorderPane(); // Main pane
 
 			topBox = new VBox(); //Top box create
@@ -82,16 +90,28 @@ public class MainPane extends Application {
 
 			topMenu = new MenuBar();
 				menuFile = new Menu("File");
-					addFile = new MenuItem("Add File"); addFolder = new MenuItem("Add Folder"); loadPlaylist = new MenuItem("Load Playlist");
+					addFile = new MenuItem("Add File");
+					//Add file button action
+						addFile.setOnAction(e->{
+							MenuFile.addFile();
+						});
+					addFolder = new MenuItem("Add Folder");
+					loadPlaylist = new MenuItem("Load Playlist");
+
 				menuFile.getItems().addAll(addFile, addFolder, loadPlaylist);
 
 				menuView = new Menu("View");
-					loadPreset = new MenuItem("Load preset.."); viewSpectrum = new MenuItem("View Spectrum"); viewOsci = new MenuItem("View Oscilloscope");
-					disableAnimLogo = new CheckMenuItem("Animated Logo"); disableAnimLogo.setSelected(true);
+					loadPreset = new MenuItem("Load preset..");
+					viewSpectrum = new MenuItem("View Spectrum");
+					viewOsci = new MenuItem("View Oscilloscope");
+					disableAnimLogo = new CheckMenuItem("Animated Logo");
+						disableAnimLogo.setSelected(true);
+
 				menuView.getItems().addAll(loadPreset, viewSpectrum, viewOsci, disableAnimLogo);
 
 				menuAbout = new Menu("About");
 					displayAbout = new MenuItem("About");
+
 				menuAbout.getItems().add(displayAbout);
 
 			topMenu.prefWidthProperty().bind(primaryStage.widthProperty());
