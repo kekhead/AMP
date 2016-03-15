@@ -1,8 +1,11 @@
 package AMP;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
@@ -19,6 +22,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -63,7 +67,7 @@ public class MainPane extends Application {
 
 		private Slider sdVolume; private Slider sdSeek; //Volume and seek sliders
 
-	private TableView libraryView;
+	private TableView<TableNames> libraryView;
 		private TableColumn playingColumn;
 		private TableColumn titleColumn;
 		private TableColumn durationColumn;
@@ -91,12 +95,25 @@ public class MainPane extends Application {
 			topMenu = new MenuBar();
 				menuFile = new Menu("File");
 					addFile = new MenuItem("Add File");
+
 					//Add file button action
+
 						addFile.setOnAction(e->{
+
 							MenuFile.addFile();
+							libraryView.setItems(FXCollections.observableArrayList(MenuFile.getLoadedNames()));
 						});
 					addFolder = new MenuItem("Add Folder");
+					//Add folder button action
+						addFolder.setOnAction(e->{
+							MenuFile.addFolder();
+							libraryView.setItems(FXCollections.observableArrayList(MenuFile.getLoadedNames()));
+						});
+
 					loadPlaylist = new MenuItem("Load Playlist");
+						loadPlaylist.setOnAction(e->{
+							//TODO Playlist implementation
+						});
 
 				menuFile.getItems().addAll(addFile, addFolder, loadPlaylist);
 
@@ -162,8 +179,9 @@ public class MainPane extends Application {
 
 
 			//Sliders
-				sdVolume = new Slider(0,100,100); sdVolume.setPadding(new Insets(0,10,0,5));
+				sdVolume = new Slider(0,1,1); sdVolume.setPadding(new Insets(0,10,0,5));
 					sdVolume.setPrefWidth(175);
+
 				sdSeek = new Slider(); sdSeek.setPadding(new Insets(0,0,0,10));
 					sdSeek.setPrefWidth(200);
 
@@ -206,7 +224,7 @@ public class MainPane extends Application {
 
 			//Table View for library.
 
-			libraryView = new TableView();
+			libraryView = new TableView<TableNames>();
 			libraryView.setEditable(false);
 
 			//Max width
@@ -215,12 +233,26 @@ public class MainPane extends Application {
 				playingColumn = new TableColumn("Playing");
 					playingColumn.setMinWidth(Control.USE_PREF_SIZE);
 
+				playingColumn.setCellValueFactory(
+					    new PropertyValueFactory<TableNames,String>("playing")
+				);
+
+
 				titleColumn = new TableColumn("Title");
 					titleColumn.setMinWidth(435);
 					titleColumn.setPrefWidth(440);
 					titleColumn.prefWidthProperty().bind(libraryView.widthProperty().subtract(160));
+
+				titleColumn.setCellValueFactory(
+					    new PropertyValueFactory<TableNames,String>("title")
+				);
+
 				durationColumn = new TableColumn("Duration");
 					durationColumn.setMinWidth(Control.USE_PREF_SIZE);
+
+				durationColumn.setCellValueFactory(
+					    new PropertyValueFactory<TableNames,String>("duration")
+				);
 
 
 			//Add columns and empty placeholder.
