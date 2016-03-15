@@ -19,6 +19,7 @@
 }
 
 .menu-bar > .container > .menu> .label {
+	-fx-font: 16px System;
     -fx-text-fill: black;
 }
 

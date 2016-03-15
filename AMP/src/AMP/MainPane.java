@@ -233,12 +233,14 @@ public class MainPane extends Application {
 				playingColumn = new TableColumn("Playing");
 					playingColumn.setMinWidth(Control.USE_PREF_SIZE);
 
+				playingColumn.setStyle("-fx-alignment: BASELINE_CENTER");
+
 				playingColumn.setCellValueFactory(
 					    new PropertyValueFactory<TableNames,String>("playing")
 				);
 
-
 				titleColumn = new TableColumn("Title");
+
 					titleColumn.setMinWidth(435);
 					titleColumn.setPrefWidth(440);
 					titleColumn.prefWidthProperty().bind(libraryView.widthProperty().subtract(160));
@@ -249,6 +251,8 @@ public class MainPane extends Application {
 
 				durationColumn = new TableColumn("Duration");
 					durationColumn.setMinWidth(Control.USE_PREF_SIZE);
+
+				durationColumn.setStyle("-fx-alignment: BASELINE_RIGHT");
 
 				durationColumn.setCellValueFactory(
 					    new PropertyValueFactory<TableNames,String>("duration")
@@ -266,7 +270,8 @@ public class MainPane extends Application {
 					imgBox.setFill(Color.WHITE); imgBox.setStroke(Color.LIGHTGREY);
 
 				coverImgView = new ImageView();
-				infoView = new ListView();
+				infoView = new ListView<String>();
+					infoView.setPrefHeight(848);
 
 
 			leftBox.getChildren().addAll(imgBox, infoView);
