@@ -172,6 +172,8 @@ public class MainPane extends Application {
 				placeholder.setFill(Color.WHITE);
 				placeholder.widthProperty().bind(primaryStage.widthProperty());
 
+				 topMenu.setPrefHeight(35);
+
 			//Add MenuBar and HBox to the pane.
 			topPane.getChildren().addAll(topMenu, audioControl);
 
