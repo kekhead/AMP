@@ -60,8 +60,6 @@ public class MenuFile
 
 		//Add string names
 		arrayToString();
-
-		System.out.println(loadedFiles);
 	}
 
 	protected static void addFolder(){
@@ -111,9 +109,6 @@ public class MenuFile
 		//Set string names
 		arrayToString();
 
-		//Print for testing
-		System.out.println(loadedFiles);
-
 	}
 
 	protected void loadPlaylist(){
@@ -127,7 +122,6 @@ public class MenuFile
 			fileNames.add(new TableNames("play", f.getName(), "duration"));
 		}
 
-		System.out.println(fileNames);
 	}
 
 	protected static ArrayList<File> getLoaded(){

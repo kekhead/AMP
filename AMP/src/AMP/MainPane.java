@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javazoom.jlgui.basicplayer.BasicController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
@@ -79,6 +80,11 @@ public class MainPane extends Application {
 
 		ListView infoView;
 
+	private ArrayList<File> loadedFiles = new ArrayList<File>();
+
+	private AudioControl controlClass = new AudioControl();
+	private BasicController control;
+
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -102,12 +108,16 @@ public class MainPane extends Application {
 
 							MenuFile.addFile();
 							libraryView.setItems(FXCollections.observableArrayList(MenuFile.getLoadedNames()));
+							loadedFiles = MenuFile.getLoaded();
 						});
 					addFolder = new MenuItem("Add Folder");
 					//Add folder button action
 						addFolder.setOnAction(e->{
 							MenuFile.addFolder();
 							libraryView.setItems(FXCollections.observableArrayList(MenuFile.getLoadedNames()));
+							loadedFiles = MenuFile.getLoaded();
+
+							System.out.println(loadedFiles);
 						});
 
 					loadPlaylist = new MenuItem("Load Playlist");
@@ -181,9 +191,24 @@ public class MainPane extends Application {
 			//Sliders
 				sdVolume = new Slider(0,1,1); sdVolume.setPadding(new Insets(0,10,0,5));
 					sdVolume.setPrefWidth(175);
+					sdVolume.setValue(1);
+
+					sdVolume.setBlockIncrement(0.01);
+
+					sdVolume.valueProperty().addListener(e->{
+						try {
+							control.setGain(sdVolume.getValue());
+						} catch (Exception e1) {
+							if(!controlClass.isPlaying)
+								return;
+							else e1.printStackTrace();
+						}
+					});
 
 				sdSeek = new Slider(); sdSeek.setPadding(new Insets(0,0,0,10));
 					sdSeek.setPrefWidth(200);
+
+
 
 			//Add sliders to HBox
 			sliderControl.getChildren().addAll(sdVolume, sdSeek);
@@ -298,6 +323,26 @@ public class MainPane extends Application {
 				primaryStage.setMaxHeight(848); primaryStage.setMinHeight(750);
 
 			primaryStage.show();
+
+			btPlay.setOnAction(e->{
+				try {
+
+					control = controlClass.playSelected
+							(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
+					control.play();
+
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			});
+			btStop.setOnAction(e->{
+				try{
+					control.stop();
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			});
 
 	}
 
