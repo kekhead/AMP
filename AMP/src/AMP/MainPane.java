@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javazoom.jlgui.basicplayer.BasicController;
+import javazoom.jlgui.basicplayer.BasicPlayer;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
@@ -21,6 +23,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,6 +33,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -84,6 +88,7 @@ public class MainPane extends Application {
 
 	private AudioControl controlClass = new AudioControl();
 	private BasicController control;
+	private BasicPlayer player;
 
 
 	@Override
@@ -191,13 +196,14 @@ public class MainPane extends Application {
 			//Sliders
 				sdVolume = new Slider(0,1,1); sdVolume.setPadding(new Insets(0,10,0,5));
 					sdVolume.setPrefWidth(175);
-					sdVolume.setValue(1);
+					sdVolume.setValue(1); sdVolume.setMax(1);
 
-					sdVolume.setBlockIncrement(0.01);
+					sdVolume.setBlockIncrement(0.02);
 
 					sdVolume.valueProperty().addListener(e->{
 						try {
 							control.setGain(sdVolume.getValue());
+							System.out.println(player.getGainValue());
 						} catch (Exception e1) {
 							if(!controlClass.isPlaying)
 								return;
@@ -324,12 +330,36 @@ public class MainPane extends Application {
 
 			primaryStage.show();
 
-			btPlay.setOnAction(e->{
-				try {
+			primaryStage.setOnCloseRequest(e->{
+					try {
+						System.exit(0);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			});
 
-					control = controlClass.playSelected
-							(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
-					control.play();
+			btPlay.setOnAction(e->{
+				player = AudioControl.getPlayer();
+				try {
+					if(player.getStatus() == BasicPlayer.PAUSED){
+							control.resume();
+					}
+					else if(player.getStatus() == BasicPlayer.PLAYING || player.getStatus() == BasicPlayer.PAUSED){
+						control = controlClass.playSelected
+								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
+							control.play();
+					}
+					else if(player.getStatus() == BasicPlayer.STOPPED || player.getStatus() == BasicPlayer.UNKNOWN){
+						if(libraryView.getItems().isEmpty() || libraryView.getSelectionModel().getSelectedIndex() == -1){
+							return;
+						}
+						else {
+							control = controlClass.playSelected
+								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
+							control.play();
+						}
+					}
 
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -337,12 +367,58 @@ public class MainPane extends Application {
 			});
 			btStop.setOnAction(e->{
 				try{
-					control.stop();
+					player = AudioControl.getPlayer();
+					if(player == null){ return;}
+
+					else if (player.getStatus() == BasicPlayer.PLAYING){
+						control.stop();
+					}
 				}
 				catch(Exception e2){
 					e2.printStackTrace();
 				}
 			});
+
+			btPause.setOnAction(e->{
+				try {
+					player = AudioControl.getPlayer();
+					if(player == null){ return;}
+
+					else if(player.getStatus() == BasicPlayer.PLAYING){
+						control.pause();
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+
+	        libraryView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+	        	//Get file name without extension
+		          //  if (libraryView.getSelectionModel().getSelectedItem() != null) {
+
+					//	File file = loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex());
+					//	int pos = file.getName().lastIndexOf(".");
+						//System.out.println(file.getName().substring(0, pos));
+		           // }
+	        });
+
+	      libraryView.setRowFactory( tv -> {
+	          TableRow<TableNames> row = new TableRow<TableNames>();
+	          row.setOnMouseClicked(event -> {
+	              if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+						control = controlClass.playSelected
+								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
+							try {
+								control.play();
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+	              }
+	          });
+	          return row ;
+	      });
 
 	}
 

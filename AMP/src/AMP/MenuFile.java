@@ -119,7 +119,9 @@ public class MenuFile
 		fileNames.clear();
 
 		for(File f : loadedFiles){
-			fileNames.add(new TableNames("play", f.getName(), "duration"));
+			int pos = f.getName().lastIndexOf(".");
+
+			fileNames.add(new TableNames("", f.getName().substring(0, pos), ""));
 		}
 
 	}

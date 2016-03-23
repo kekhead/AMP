@@ -1,6 +1,6 @@
 package AMP;
 
-public class InfoExtract 
+public class InfoExtract
 {
 
 }

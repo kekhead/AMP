@@ -19,15 +19,9 @@ public class AudioControl implements BasicPlayerListener {
 	protected boolean isShuffle;
 	protected boolean isRepeat;
 
-	private BasicPlayer player = new BasicPlayer();
+	private static BasicPlayer player = new BasicPlayer();
 	private BasicController control;
 
-
-	public static void main(String []args){
-
-
-
-	}
 	protected BasicController playSelected(File filename, Slider sdVolume){
 
 		control = (BasicController) player;
@@ -40,7 +34,7 @@ public class AudioControl implements BasicPlayerListener {
 			System.out.println("song is not playing, starting song");
 
 			control.open(filename);
-			control.setGain(sdVolume.getValue());
+			control.setGain(100);
 			control.play();
 			isPlaying = true;
 			}
@@ -48,11 +42,11 @@ public class AudioControl implements BasicPlayerListener {
 
 			System.out.println("song is playing, starting new song");
 
-			control.stop();
-			control.open(filename);
-			control.setGain(sdVolume.getValue());
-			control.play();
-			isPlaying = true;
+					control.stop();
+					control.open(filename);
+					control.setGain(sdVolume.getValue());
+					control.play();
+					isPlaying = true;
 			}
 			else if (player.getStatus() == BasicPlayer.PAUSED){
 
@@ -69,44 +63,8 @@ public class AudioControl implements BasicPlayerListener {
 
 	}
 
-	protected void stopCurrent(){
-
-	try {
-		if(player.getStatus() == BasicPlayer.PAUSED || player.getStatus() == BasicPlayer.PLAYING){
-
-		System.out.println("stopping...");
-		control.stop();
-
-		}
-
-		else{
-		System.out.println("cannot stop");
-		}
-	} catch (BasicPlayerException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-
-	}
-
-	protected void pauseCurrent(){
-		try {
-		if(player.getStatus() == BasicPlayer.PLAYING){
-		System.out.println("Pausing current song");
-
-		control.pause();
-
-		}
-		else{
-
-		System.out.println("cannot pause song");
-
-		}
-
-		} catch (BasicPlayerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	protected static BasicPlayer getPlayer(){
+		return player;
 
 	}
 
@@ -160,9 +118,7 @@ public class AudioControl implements BasicPlayerListener {
 	}
 
 	@Override
-	public void opened(Object arg0, Map arg1) {
-		// TODO Auto-generated method stub
-
+	public void opened(Object stream, Map properties) {
 	}
 
 	@Override
