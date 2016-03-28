@@ -2,6 +2,7 @@ package AMP;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -30,6 +31,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -90,6 +92,9 @@ public class MainPane extends Application {
 	private AudioControl controlClass = new AudioControl();
 	private BasicController control;
 	private BasicPlayer player;
+	
+	private MenuBar RightMenu;
+		private MenuItem Remove, Properties;
 
 
 	@Override
@@ -214,9 +219,21 @@ public class MainPane extends Application {
 
 				sdSeek = new Slider(); sdSeek.setPadding(new Insets(0,0,0,10));
 					sdSeek.setPrefWidth(200);
-
-
-
+					
+					sdSeek.valueProperty().addListener(e->{
+						try{
+							player = AudioControl.getPlayer();
+							long x = (long) sdVolume.getValue();
+							player.seek(x);
+							
+						}catch (Exception e1) {
+							if(!controlClass.isPlaying)
+								return;
+							else e1.printStackTrace();
+						}
+						
+					});
+				
 			//Add sliders to HBox
 			sliderControl.getChildren().addAll(sdVolume, sdSeek);
 			sliderControl.setAlignment(Pos.CENTER);
@@ -349,6 +366,7 @@ public class MainPane extends Application {
 					else if(player.getStatus() == BasicPlayer.PLAYING || player.getStatus() == BasicPlayer.PAUSED){
 						control = controlClass.playSelected
 								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
+						
 							control.play();
 					}
 					else if(player.getStatus() == BasicPlayer.STOPPED || player.getStatus() == BasicPlayer.UNKNOWN){
@@ -358,7 +376,10 @@ public class MainPane extends Application {
 						else {
 							control = controlClass.playSelected
 								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
+					
 							control.play();
+							
+							
 						}
 					}
 
@@ -445,6 +466,55 @@ public class MainPane extends Application {
 					e1.printStackTrace();
 				}
 			});
+			
+			btRepeat.setOnAction(e->{
+				try{
+					player = AudioControl.getPlayer();
+					if(player == null){ return;}
+					
+					if(player.getStatus() == BasicPlayer.PLAYING || player.getStatus() == BasicPlayer.PAUSED
+							|| player.getStatus() == BasicPlayer.STOPPED ){
+					
+						control = controlClass.repeatOn
+								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
+						
+							control.play();
+						
+					}
+					
+				}
+				catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+			
+			btShuffle.setOnAction(e->{
+				try{
+					player = AudioControl.getPlayer();
+					if(player == null){ return;}
+					
+					if(player.getStatus() == BasicPlayer.PLAYING || player.getStatus() == BasicPlayer.PAUSED
+							|| player.getStatus() == BasicPlayer.STOPPED ){
+						
+						Random rand = new Random();
+						int value = rand.nextInt(loadedFiles.size());
+						
+						control = controlClass.shuffleOn
+								(loadedFiles.get(value), sdVolume);
+						
+						libraryView.getSelectionModel().select(value);
+						
+						control.play();
+						
+					}
+					
+				}
+				catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
 	        libraryView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
 	        	//Get file name without extension
 		          //  if (libraryView.getSelectionModel().getSelectedItem() != null) {
@@ -454,20 +524,53 @@ public class MainPane extends Application {
 						//System.out.println(file.getName().substring(0, pos));
 		           // }
 	        });
+	        
+	        libraryView.setRowFactory( tv -> {
+		          TableRow<TableNames> row = new TableRow<TableNames>();
+		          row.setOnMouseClicked(event -> {
+		        try {
+		              if (event.getButton() == MouseButton.SECONDARY && (! row.isEmpty()) ) {
+		            	  
+		            	  MenuBar infomain = new MenuBar();
+							Menu info = new Menu();
+							MenuItem info2 = new MenuItem(), remove = new MenuItem();
+							info.getItems().addAll(info2,remove);
+							infomain.getMenus().add(info);
+							
+						Pane paneInfo = new Pane();
+						paneInfo.getChildren().add(infomain);
+						
+						paneInfo.setLayoutX(event.getX());
+						paneInfo.setLayoutY(event.getY());
+							
+							}
+		             
+		        		} catch (Exception e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+		               });
+		          return row ;
+		      });
+
+		
 
 	      libraryView.setRowFactory( tv -> {
 	          TableRow<TableNames> row = new TableRow<TableNames>();
 	          row.setOnMouseClicked(event -> {
+	        try {
 	              if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 						control = controlClass.playSelected
 								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex()), sdVolume);
-							try {
+		
 								control.play();
-							} catch (Exception e1) {
+							}
+	             
+	        		} catch (Exception e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-	              }
+	              
 	          });
 	          return row ;
 	      });

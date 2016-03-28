@@ -37,6 +37,8 @@ public class AudioControl implements BasicPlayerListener {
 			control.setGain(100);
 			control.play();
 			isPlaying = true;
+			
+
 			}
 			else if (player.getStatus() == BasicPlayer.PLAYING){
 
@@ -100,11 +102,24 @@ public class AudioControl implements BasicPlayerListener {
 		return control;
 			}
 
-	protected void shuffleOn(){
+	protected BasicController shuffleOn(File filename , Slider sdVolume){
 
-	}
+		try{
+			control.stop();
+			control.open(filename);
+			control.setGain(sdVolume.getValue());
+			control.play();
+		}
+		catch(BasicPlayerException e){
+			e.printStackTrace();
+		}
+		return control;
 
-	protected void repeatOn(File filename , Slider sdVolume){
+		}
+	
+
+	protected BasicController repeatOn(File filename , Slider sdVolume){
+		
 
 	try{
 		control.stop();
@@ -115,6 +130,7 @@ public class AudioControl implements BasicPlayerListener {
 	catch(BasicPlayerException e){
 		e.printStackTrace();
 	}
+	return control;
 
 	}
 
