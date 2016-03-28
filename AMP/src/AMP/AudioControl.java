@@ -68,7 +68,7 @@ public class AudioControl implements BasicPlayerListener {
 
 	}
 
-	protected void nextPlay(File filename, Slider sdVolume){
+	protected BasicController nextPlay(File filename, Slider sdVolume){
 
 		try{
 
@@ -97,6 +97,7 @@ public class AudioControl implements BasicPlayerListener {
 		catch(BasicPlayerException e){
 			e.printStackTrace();
 		}
+		return control;
 			}
 
 	protected void shuffleOn(){

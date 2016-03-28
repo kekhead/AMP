@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -392,7 +393,58 @@ public class MainPane extends Application {
 					e1.printStackTrace();
 				}
 			});
+			
+			btNext.setOnAction(e->{
+				try{
+					player = AudioControl.getPlayer();
+					if(player == null){ return;}
+					
+					if(player.getStatus() == BasicPlayer.PLAYING && libraryView.getSelectionModel().getSelectedIndex() 
+							!= loadedFiles.size()-1 || player.getStatus() == BasicPlayer.PAUSED && libraryView.getSelectionModel().getSelectedIndex() 
+									!= loadedFiles.size()-1
+							|| player.getStatus() == BasicPlayer.STOPPED && libraryView.getSelectionModel().getSelectedIndex() 
+							!= loadedFiles.size()-1){
+					
+						control = controlClass.nextPlay
+								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex() + 1), sdVolume);
+												control.play();
+						libraryView.getSelectionModel().select(libraryView.getSelectionModel().getSelectedIndex() + 1);
+						
+					}
+					
+				}
+				catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
 
+			btPrev.setOnAction(e->{
+				try{
+					player = AudioControl.getPlayer();
+					if(player == null){ return;}
+					
+					if(player.getStatus() == BasicPlayer.PLAYING && libraryView.getSelectionModel().getSelectedIndex() 
+							!= 0|| player.getStatus() == BasicPlayer.PAUSED && libraryView.getSelectionModel().getSelectedIndex() 
+									!= 0
+							|| player.getStatus() == BasicPlayer.STOPPED && libraryView.getSelectionModel().getSelectedIndex() 
+							!= 0){
+					
+						control = controlClass.nextPlay
+								(loadedFiles.get(libraryView.getSelectionModel().getSelectedIndex() - 1), sdVolume);
+						
+						libraryView.getSelectionModel().select(libraryView.getSelectionModel().getSelectedIndex() - 1);
+						
+							control.play();
+						
+					}
+					
+				}
+				catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
 	        libraryView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
 	        	//Get file name without extension
 		          //  if (libraryView.getSelectionModel().getSelectedItem() != null) {
